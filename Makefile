@@ -37,7 +37,7 @@ endif
 %.o:%.c $(HDRS)
 	$(CC) -c -o $@ $< $(CFLAGS) -DVERSION=\"$(VERSION)\"
 
-menu-helper: $(OBJS) $(HDRS)
+menu-helper: $(OBJS)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 .PHONY: clean distclean install
