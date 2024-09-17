@@ -19,7 +19,6 @@
 #include <stdio.h>
 
 #include "arg_parse.h"
-#include "global.h"
 
 void print_version(void) {
 	printf("menu-helper v%s\n\n", VERSION);

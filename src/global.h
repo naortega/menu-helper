@@ -17,8 +17,4 @@
  */
 #pragma once
 
-#ifndef VERSION
-#define VERSION "VERSION"
-#endif
-
 #define ARRAY_LEN(arr) (sizeof(arr) / sizeof(arr[0]))
