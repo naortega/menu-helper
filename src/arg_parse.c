@@ -17,6 +17,9 @@
  */
 #include "arg_parse.h"
 
+#include "util.h"
+#include <string.h>
+
 enum cmd_id parse_args(const char *cmd) {
 	for(int i = 0; i < (int)ARRAY_LEN(commands); ++i) {
 		for(int j = 0; j < (int)ARRAY_LEN(commands[i].str); ++j) {

@@ -17,11 +17,6 @@
  */
 #pragma once
 
-#include <string.h>
-#include <stdio.h>
-
-#include "global.h"
-
 enum cmd_id {
 	CMD_UNKNOWN = 0,
 	CMD_HELP,
