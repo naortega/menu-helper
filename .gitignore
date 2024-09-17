@@ -1,2 +1,4 @@
 *.o
 /menu-helper
+/compile_commands.json
+.cache/*
