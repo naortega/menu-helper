@@ -20,8 +20,8 @@ INCFLAGS=
 LDFLAGS=-lsqlite3
 DEFS=
 CFLAGS=$(INCFLAGS) -std=c99 -Wall -Wextra -Wfatal-errors -Werror
-HDRS=src/arg_parse.h src/util.h
-OBJS=src/main.o src/arg_parse.o
+HDRS=src/arg_parse.h src/util.h src/db.h
+OBJS=src/main.o src/arg_parse.o src/db.o
 VERSION=1.0
 
 ifeq ($(PREFIX),)
