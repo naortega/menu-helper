@@ -17,6 +17,8 @@
  */
 #pragma once
 
+#include <stdio.h>
+
 enum cmd_id {
 	CMD_UNKNOWN = 0,
 	CMD_HELP,
@@ -32,5 +34,24 @@ static const struct cmd commands[] = {
 	{ CMD_HELP, {"help", "-h", "--help"} },
 	{ CMD_VERSION, {"version", "-v", "--version"} },
 };
+
+static inline void print_version(void) {
+	printf("menu-helper v%s\n\n", VERSION);
+}
+
+static inline void print_usage(void) {
+	printf("USAGE: menu-helper <cmd> [options]\n\n");
+}
+
+static inline void print_help(void) {
+	print_version();
+	print_usage();
+
+	printf("COMMANDS:\n"
+		   "\thelp, -h, --help         Show this help information.\n"
+		   "\tversion, -v, --version   Show version information.\n"
+		   "\n");
+}
+
 
 enum cmd_id parse_args(const char *cmd);

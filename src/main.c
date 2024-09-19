@@ -20,24 +20,6 @@
 
 #include "arg_parse.h"
 
-void print_version(void) {
-	printf("menu-helper v%s\n\n", VERSION);
-}
-
-void print_usage(void) {
-	printf("USAGE: menu-helper <cmd> [options]\n\n");
-}
-
-void print_help(void) {
-	print_version();
-	print_usage();
-
-	printf("COMMANDS:\n"
-		   "\thelp, -h, --help         Show this help information.\n"
-		   "\tversion, -v, --version   Show version information.\n"
-		   "\n");
-}
-
 int main(int argc, char *argv[]) {
 	enum cmd_id id;
 
