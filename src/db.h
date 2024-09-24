@@ -19,3 +19,46 @@
 
 int db_open(void);
 void db_close(void);
+
+/**
+ * @brief Add a new recipe to the database.
+ *
+ * @param name Name of the new recipe.
+ * @param description Short description.
+ *
+ * @return ID of newly created recipe, -1 if DB isn't open, -2 on other failure.
+ */
+int db_add_recipe(const char *name, const char *description);
+int db_get_recipe_id(const char *name);
+static inline int db_recipe_exists(const char *name) {
+	return (db_get_recipe_id(name) > 0);
+}
+
+/**
+ * @brief Add a new ingredient to the database.
+ *
+ * @param name Name of the new ingredient.
+ *
+ * @return ID of newly created ingredient, -1 if DB isn't open, -2 on other failure.
+ */
+int db_add_ingredient(const char *name);
+int db_get_ingredient_id(const char *name);
+static inline int db_ingredient_exists(const char *name) {
+	return (db_get_ingredient_id(name) > 0);
+}
+
+/**
+ * @brief Add a new tag to the database.
+ *
+ * @param name Name of the new tag.
+ *
+ * @return ID of newly created tag, -1 if DB isn't open, -2 on other failure.
+ */
+int db_add_tag(const char *name);
+int db_get_tag_id(const char *name);
+static inline int db_tag_exists(const char *name) {
+	return (db_get_tag_id(name) > 0);
+}
+
+int db_conn_recipe_ingredient(int recipe_id, int ingredient_id);
+int db_conn_recipe_tag(int recipe_id, int tag_id);

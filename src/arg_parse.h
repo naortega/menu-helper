@@ -21,6 +21,7 @@
 
 enum cmd_id {
 	CMD_UNKNOWN = 0,
+	CMD_ADD,
 	CMD_HELP,
 	CMD_VERSION,
 };
@@ -31,6 +32,7 @@ struct cmd {
 };
 
 static const struct cmd commands[] = {
+	{ CMD_ADD, {"add", "new"} },
 	{ CMD_HELP, {"help", "-h", "--help"} },
 	{ CMD_VERSION, {"version", "-v", "--version"} },
 };
@@ -48,6 +50,7 @@ static inline void print_help(void) {
 	print_usage();
 
 	printf("COMMANDS:\n"
+		   "\tadd, new                 Add a new recipe to the database\n"
 		   "\thelp, -h, --help         Show this help information.\n"
 		   "\tversion, -v, --version   Show version information.\n"
 		   "\n");

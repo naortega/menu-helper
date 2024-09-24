@@ -19,9 +19,9 @@ DEBUG=0
 INCFLAGS=
 LDFLAGS=-lsqlite3
 DEFS=
-CFLAGS=$(INCFLAGS) -std=c99 -Wall -Wextra -Wfatal-errors -Werror
-HDRS=src/arg_parse.h src/util.h src/db.h
-OBJS=src/main.o src/arg_parse.o src/db.o
+CFLAGS=$(INCFLAGS) -std=gnu99 -Wall -Wextra -Wfatal-errors -Werror
+HDRS=src/arg_parse.h src/util.h src/db.h src/cmd.h
+OBJS=src/main.o src/arg_parse.o src/db.o src/cmd.o
 VERSION=1.0
 
 ifeq ($(PREFIX),)

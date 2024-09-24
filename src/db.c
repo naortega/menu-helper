@@ -25,7 +25,7 @@
 #include <stdio.h>
 
 static sqlite3 *db = NULL;
-static const  int db_version = 1;
+static const int db_version = 1;
 
 int db_open(void) {
 	const char *xdg_data_home;
@@ -42,13 +42,15 @@ int db_open(void) {
 	strcpy(db_path, xdg_data_home);
 	strcat(db_path, "/menu-helper");
 
-	if(access(db_path, F_OK) != 0) {
-		printf("Creating database: %s\n", db_path);
+	if(access(db_path, F_OK) != 0)
 		mkdir(db_path, 0700);
-		new_db = 1;
-	}
 
 	strcat(db_path, "/recipes.db");
+
+	if(access(db_path, F_OK) != 0) {
+		printf("Creating database: %s\n", db_path);
+		new_db = 1;
+	}
 
 	rc = sqlite3_open(db_path, &db);
 	free(db_path);
@@ -73,4 +75,147 @@ void db_close(void) {
 		return;
 
 	sqlite3_close(db);
+}
+
+int query_id_cb(void *recipe_id_var, int col_num, char **col_data, char **col_name) {
+	int *recipe_id_ptr = (int*)recipe_id_var;
+	int ret = 1;
+
+	for(int i = 0; i < col_num; ++i) {
+		if(strcmp(col_name[i], "id") == 0) {
+			*recipe_id_ptr = atoi(col_data[i]);
+			ret = 0;
+			break;
+		}
+	}
+
+	return ret;
+}
+
+int table_get_id_by_name(const char *table, const char *name) {
+	const char *sel_query_fmt = "SELECT id FROM %s WHERE lower(name)=lower('%s');";
+	char *sel_query;
+	int id = 0;
+
+	sel_query = malloc(strlen(table) + strlen(name) + strlen(sel_query_fmt) + 1);
+	sprintf(sel_query, sel_query_fmt, table, name);
+	if(sqlite3_exec(db, sel_query, query_id_cb, &id, NULL) != SQLITE_OK) {
+		free(sel_query);
+		return -2;
+	}
+
+	free(sel_query);
+
+	return id;
+}
+
+int db_add_recipe(const char *name, const char *description) {
+	const char *add_query_fmt = "INSERT INTO recipes(name,description) VALUES('%s','%s');";
+	char *add_query;
+
+	if(!db)
+		return -1;
+
+	add_query = malloc(strlen(name) + strlen(description) + strlen(add_query_fmt) + 1);
+	sprintf(add_query, add_query_fmt, name, description);
+	if(sqlite3_exec(db, add_query, NULL, NULL, NULL) != SQLITE_OK) {
+		free(add_query);
+		return -2;
+	}
+	free(add_query);
+
+	return db_get_recipe_id(name);
+}
+
+int db_get_recipe_id(const char *name) {
+	if(!db)
+		return -1;
+
+	return table_get_id_by_name("recipes", name);
+}
+
+int db_add_ingredient(const char *name) {
+	const char *add_query_fmt = "INSERT INTO ingredients(name) VALUES(lower('%s'));";
+	char *add_query;
+
+	if(!db)
+		return -1;
+
+	add_query = malloc(strlen(name) + strlen(add_query_fmt) + 1);
+	sprintf(add_query, add_query_fmt, name);
+	if(sqlite3_exec(db, add_query, NULL, NULL, NULL) != SQLITE_OK) {
+		free(add_query);
+		return -2;
+	}
+	free(add_query);
+
+	return db_get_ingredient_id(name);
+}
+
+int db_get_ingredient_id(const char *name) {
+	if(!db)
+		return -1;
+
+	return table_get_id_by_name("ingredients", name);
+}
+
+int db_add_tag(const char *name) {
+	const char *add_query_fmt = "INSERT INTO tags(name) VALUES('%s');";
+	char *add_query;
+
+	if(!db)
+		return -1;
+
+	add_query = malloc(strlen(name) + strlen(add_query_fmt) + 1);
+	sprintf(add_query, add_query_fmt, name);
+	if(sqlite3_exec(db, add_query, NULL, NULL, NULL) != SQLITE_OK) {
+		free(add_query);
+		return -2;
+	}
+	free(add_query);
+
+	return db_get_tag_id(name);
+}
+
+int db_get_tag_id(const char *name) {
+	if(!db)
+		return -1;
+
+	return table_get_id_by_name("tags", name);
+}
+
+int db_conn_recipe_ingredient(int recipe_id, int ingredient_id) {
+	const char *add_conn_fmt = "INSERT INTO recipe_ingredient(recipe_id, ingredient_id) VALUES(%d,%d);";
+	char *add_conn_query;
+
+	if(!db)
+		return -1;
+
+	add_conn_query = malloc(strlen(add_conn_fmt) + (recipe_id % 10) + (ingredient_id % 10));
+	sprintf(add_conn_query, add_conn_fmt, recipe_id, ingredient_id);
+	if(sqlite3_exec(db, add_conn_query, NULL, NULL, NULL) != SQLITE_OK) {
+		free(add_conn_query);
+		return -2;
+	}
+	free(add_conn_query);
+
+	return 1;
+}
+
+int db_conn_recipe_tag(int recipe_id, int tag_id) {
+	const char *add_conn_fmt = "INSERT INTO recipe_tag(recipe_id, tag_id) VALUES(%d,%d);";
+	char *add_conn_query;
+
+	if(!db)
+		return -1;
+
+	add_conn_query = malloc(strlen(add_conn_fmt) + (recipe_id % 10) + (tag_id % 10));
+	sprintf(add_conn_query, add_conn_fmt, recipe_id, tag_id);
+	if(sqlite3_exec(db, add_conn_query, NULL, NULL, NULL) != SQLITE_OK) {
+		free(add_conn_query);
+		return -2;
+	}
+	free(add_conn_query);
+
+	return 1;
 }
