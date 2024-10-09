@@ -17,6 +17,8 @@
  */
 #pragma once
 
+#include <string>
+
 int db_open(void);
 void db_close(void);
 
@@ -28,9 +30,9 @@ void db_close(void);
  *
  * @return ID of newly created recipe, -1 if DB isn't open, -2 on other failure.
  */
-int db_add_recipe(const char *name, const char *description);
-int db_get_recipe_id(const char *name);
-static inline int db_recipe_exists(const char *name) {
+int db_add_recipe(const std::string &name, const std::string &description);
+int db_get_recipe_id(const std::string &name);
+static inline int db_recipe_exists(const std::string &name) {
 	return (db_get_recipe_id(name) > 0);
 }
 
@@ -41,9 +43,9 @@ static inline int db_recipe_exists(const char *name) {
  *
  * @return ID of newly created ingredient, -1 if DB isn't open, -2 on other failure.
  */
-int db_add_ingredient(const char *name);
-int db_get_ingredient_id(const char *name);
-static inline int db_ingredient_exists(const char *name) {
+int db_add_ingredient(const std::string &name);
+int db_get_ingredient_id(const std::string &name);
+static inline int db_ingredient_exists(const std::string &name) {
 	return (db_get_ingredient_id(name) > 0);
 }
 
@@ -54,9 +56,9 @@ static inline int db_ingredient_exists(const char *name) {
  *
  * @return ID of newly created tag, -1 if DB isn't open, -2 on other failure.
  */
-int db_add_tag(const char *name);
-int db_get_tag_id(const char *name);
-static inline int db_tag_exists(const char *name) {
+int db_add_tag(const std::string &name);
+int db_get_tag_id(const std::string &name);
+static inline int db_tag_exists(const std::string &name) {
 	return (db_get_tag_id(name) > 0);
 }
 

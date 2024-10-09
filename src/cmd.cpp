@@ -17,84 +17,53 @@
  */
 #include "cmd.hpp"
 #include "db.hpp"
+#include "util.hpp"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+#include <iostream>
+#include <cstdlib>
+#include <string>
 
 int command_add(void) {
-	char *name = NULL, *description = NULL, *ingredients = NULL, *tags = NULL;
-	size_t name_len, description_len, ingredients_len, tags_len;
+	std::string name, description, ingredients, tags;
 	int recipe_id, ingredient_id, tag_id;
 
-	if(!db_open()) {
-		fprintf(stderr, "Failed to open database. Cannot add new entry.\n");
-		return 0;
+	if(not db_open()) {
+		std::cerr << "Failed to open database. Cannot add new entry." << std::endl;
+		return EXIT_FAILURE;
 	}
 
-	printf("Name: ");
-	getline(&name, &name_len, stdin);
-	// eliminate trailing newline
-	name[strlen(name) - 1] = '\0';
+	std::cout << "Name: ";
+	getline(std::cin, name);
 
-	printf("Description: ");
-	getline(&description, &description_len, stdin);
-	// eliminate trailing newline
-	description[strlen(description) - 1] = '\0';
+	std::cout << "Description: ";
+	getline(std::cin, description);
 
-	printf("Ingredients (comma separated): ");
-	getline(&ingredients, &ingredients_len, stdin);
-	// eliminate trailing newline
-	ingredients[strlen(ingredients) - 1] = '\0';
+	std::cout << "Ingredients (comma separated): ";
+	getline(std::cin, ingredients);
 
-	printf("Tags (comma separated): ");
-	getline(&tags, &tags_len, stdin);
-	// eliminate trailing newline
-	tags[strlen(tags) - 1] = '\0';
+	std::cout << "Tags (comma separated): ";
+	getline(std::cin, tags);
 
 	if((recipe_id = db_get_recipe_id(name)) <= 0)
 		recipe_id = db_add_recipe(name, description);
-	free(name);
-	free(description);
 
-	for(char *i = strtok(ingredients, ","); i; i = strtok(NULL,",")) {
-		// remove leading blank spaces
-		while(isblank(i[0]))
-			i += sizeof(char);
+	for(auto &ingredient : split(ingredients, ",")) {
+		trim(ingredient);
 
-		// remove trailing blank spaces
-		size_t i_len = strlen(i);
-		while(isblank(i[i_len - 1])) {
-			i[i_len - 1] = '\0';
-			--i_len;
-		}
-
-		if((ingredient_id = db_get_ingredient_id(i)) <= 0)
-			ingredient_id = db_add_ingredient(i);
+		if((ingredient_id = db_get_ingredient_id(ingredient)) <= 0)
+			ingredient_id = db_add_ingredient(ingredient);
 		db_conn_recipe_ingredient(recipe_id, ingredient_id);
 	}
-	free(ingredients);
 
-	for(char *i = strtok(tags, ","); i; i = strtok(NULL, ",")) {
-		// remove leading blank spaces
-		while(isblank(i[0]))
-			i += sizeof(char);
+	for(auto &tag : split(tags, ",")) {
+		trim(tag);
 
-		// remove trailing blank spaces
-		size_t i_len = strlen(i);
-		while(isblank(i[i_len - 1])) {
-			i[i_len - 1] = '\0';
-			--i_len;
-		}
-
-		if((tag_id = db_get_tag_id(i)) <= 0)
-			tag_id = db_add_tag(i);
+		if((tag_id = db_get_tag_id(tag)) <= 0)
+			tag_id = db_add_tag(tag);
 		db_conn_recipe_tag(recipe_id, tag_id);
 	}
-	free(tags);
 
 	db_close();
 
-	return 1;
+	return EXIT_SUCCESS;
 }
