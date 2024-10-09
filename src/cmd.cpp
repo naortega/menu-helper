@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "cmd.h"
-#include "db.h"
+#include "cmd.hpp"
+#include "db.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>

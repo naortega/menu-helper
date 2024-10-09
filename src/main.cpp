@@ -18,8 +18,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "arg_parse.h"
-#include "cmd.h"
+#include "arg_parse.hpp"
+#include "cmd.hpp"
 
 int main(int argc, char *argv[]) {
 	enum cmd_id id;

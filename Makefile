@@ -18,8 +18,8 @@ DEBUG=0
 INCFLAGS=
 LDFLAGS=-lsqlite3
 DEFS=
-CFLAGS=$(INCFLAGS) -std=gnu99 -Wall -Wextra -Wfatal-errors -Werror
-HDRS=src/arg_parse.h src/util.h src/db.h src/cmd.h
+CFLAGS=$(INCFLAGS) -std=c++11 -Wall -Wextra -Wfatal-errors -Werror
+HDRS=src/arg_parse.hpp src/db.hpp src/cmd.hpp
 OBJS=src/main.o src/arg_parse.o src/db.o src/cmd.o
 VERSION=1.0
 
@@ -33,11 +33,11 @@ else
 	CFLAGS+=-O2 -DNDEBUG
 endif
 
-%.o:%.c $(HDRS)
-	$(CC) -c -o $@ $< $(CFLAGS) -DVERSION=\"$(VERSION)\"
+%.o:%.cpp $(HDRS)
+	$(CXX) -c -o $@ $< $(CFLAGS) -DVERSION=\"$(VERSION)\"
 
 menu-helper: $(OBJS)
-	$(CC) -o $@ $^ $(LDFLAGS)
+	$(CXX) -o $@ $^ $(LDFLAGS)
 
 .PHONY: clean distclean install
 
