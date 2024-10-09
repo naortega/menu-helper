@@ -15,8 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <stdlib.h>
-#include <stdio.h>
+
+#include <iostream>
+#include <cstdlib>
 
 #include "arg_parse.hpp"
 #include "cmd.hpp"
@@ -25,7 +26,7 @@ int main(int argc, char *argv[]) {
 	enum cmd_id id;
 
 	if(argc < 2) {
-		fprintf(stderr, "Invalid number of arguments. Use 'help' sub-command.\n");
+		std::cerr << "Invalid number of arguments. Use 'help' sub-command." << std::endl;
 		print_usage();
 		return EXIT_FAILURE;
 	}
@@ -43,7 +44,7 @@ int main(int argc, char *argv[]) {
 		print_version();
 		break;
 	default:
-		fprintf(stderr, "No such command '%s'. Use 'help' sub-command.\n", argv[1]);
+		std::cerr << "No such command '" << argv[1] << "'. Use 'help' sub-command." << std::endl;
 		print_usage();
 		return EXIT_FAILURE;
 	}
