@@ -17,7 +17,10 @@
  */
 #pragma once
 
-#include <stdio.h>
+#include <iostream>
+#include <string>
+#include <map>
+#include <vector>
 
 enum cmd_id {
 	CMD_UNKNOWN = 0,
@@ -26,35 +29,29 @@ enum cmd_id {
 	CMD_VERSION,
 };
 
-struct cmd {
-	enum cmd_id id;
-	const char *str[3];
-};
-
-static const struct cmd commands[] = {
+static const std::map<enum cmd_id, std::vector<std::string>> commands = {
 	{ CMD_ADD, {"add", "new"} },
 	{ CMD_HELP, {"help", "-h", "--help"} },
 	{ CMD_VERSION, {"version", "-v", "--version"} },
 };
 
 static inline void print_version(void) {
-	printf("menu-helper v%s\n\n", VERSION);
+	std::cout << "menu-helper v" << VERSION << "\n" << std::endl;
 }
 
 static inline void print_usage(void) {
-	printf("USAGE: menu-helper <cmd> [options]\n\n");
+	std::cout << "USAGE: menu-helper <cmd> [options]\n" << std::endl;
 }
 
 static inline void print_help(void) {
 	print_version();
 	print_usage();
 
-	printf("COMMANDS:\n"
+	std::cout << "COMMANDS:\n"
 		   "\tadd, new                 Add a new recipe to the database\n"
 		   "\thelp, -h, --help         Show this help information.\n"
 		   "\tversion, -v, --version   Show version information.\n"
-		   "\n");
+		   << std::endl;
 }
 
-
-enum cmd_id parse_args(const char *cmd);
+enum cmd_id parse_args(const std::string &cmd);

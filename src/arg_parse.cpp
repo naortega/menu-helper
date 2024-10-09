@@ -17,13 +17,11 @@
  */
 #include "arg_parse.hpp"
 
-#include <string.h>
-
-enum cmd_id parse_args(const char *cmd) {
-	for(int i = 0; i < (int)ARRAY_LEN(commands); ++i) {
-		for(int j = 0; j < (int)ARRAY_LEN(commands[i].str); ++j) {
-			if(commands[i].str[j] && strcmp(commands[i].str[j], cmd) == 0)
-				return commands[i].id;
+enum cmd_id parse_args(const std::string &cmd) {
+	for(const auto &command : commands) {
+		for(const auto &alias : command.second) {
+			if(cmd == alias)
+				return command.first;
 		}
 	}
 
