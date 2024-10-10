@@ -11,7 +11,7 @@ Ensure the `XDG_DATA_HOME` variable is set (e.g. to `$HOME/.local/share`).
 
 To build the program you will require the following dependencies:
 
-- A C++ compiler compatible with GNU99 C (preferably GCC).
+- A C++ compiler compatible with C++20 (preferably GCC).
 - SQLite3 C/C++ library
 - Make
 
