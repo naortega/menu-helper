@@ -19,13 +19,14 @@
 #include "db.hpp"
 #include "util.hpp"
 
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
 #include <string>
-#include <vector>
 #include <unistd.h>
+#include <vector>
 
 int cmd_add(void) {
+	db db;
 	std::string name, description, ingredients, tags;
 	int recipe_id, ingredient_id, tag_id;
 
@@ -41,36 +42,34 @@ int cmd_add(void) {
 	std::cout << "Tags (comma separated): ";
 	getline(std::cin, tags);
 
-	if(not db_open()) {
-		std::cerr << "Failed to open database. Cannot add new entry." << std::endl;
-		return EXIT_FAILURE;
-	}
+	db.open();
 
-	if((recipe_id = db_get_recipe_id(name)) <= 0)
-		recipe_id = db_add_recipe(name, description);
+	if((recipe_id = db.get_recipe_id(name)) <= 0)
+		recipe_id = db.add_recipe(name, description);
 
 	for(auto &ingredient : split(ingredients, ",")) {
 		trim(ingredient);
 
-		if((ingredient_id = db_get_ingredient_id(ingredient)) <= 0)
-			ingredient_id = db_add_ingredient(ingredient);
-		db_conn_recipe_ingredient(recipe_id, ingredient_id);
+		if((ingredient_id = db.get_ingredient_id(ingredient)) <= 0)
+			ingredient_id = db.add_ingredient(ingredient);
+		db.conn_recipe_ingredient(recipe_id, ingredient_id);
 	}
 
 	for(auto &tag : split(tags, ",")) {
 		trim(tag);
 
-		if((tag_id = db_get_tag_id(tag)) <= 0)
-			tag_id = db_add_tag(tag);
-		db_conn_recipe_tag(recipe_id, tag_id);
+		if((tag_id = db.get_tag_id(tag)) <= 0)
+			tag_id = db.add_tag(tag);
+		db.conn_recipe_tag(recipe_id, tag_id);
 	}
 
-	db_close();
+	db.close();
 
 	return EXIT_SUCCESS;
 }
 
 int cmd_list(int argc, char *argv[]) {
+	db db;
 	std::vector<std::string> ingredients, tags;
 	int opt;
 
@@ -93,21 +92,18 @@ int cmd_list(int argc, char *argv[]) {
 		}
 	}
 
-	if(not db_open()) {
-		std::cerr << "Failed to open database. Cannot add new entry." << std::endl;
-		return EXIT_FAILURE;
-	}
+	db.open();
 
-	for(const auto &recipe : db_get_recipes(ingredients, tags))
+	for(const auto &recipe : db.get_recipes(ingredients, tags))
 		std::cout << recipe.id << "  |  " << recipe.name << "  |  " << recipe.description << std::endl;
 
-	db_close();
+	db.close();
 
 	return EXIT_SUCCESS;
 }
 
 int cmd_delete(int argc, char *argv[]) {
-	int ret = EXIT_SUCCESS;
+	db db;
 	std::vector<int> recipe_ids;
 
 	if(argc < 1) {
@@ -115,15 +111,12 @@ int cmd_delete(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	if(not db_open()) {
-		std::cerr << "Failed to open database. Cannot add new entry." << std::endl;
-		return EXIT_FAILURE;
-	}
+	db.open();
 
 	for(int i = 0; i < argc; ++i) {
 		const int id = std::stoi(argv[i]);
 
-		if(not db_recipe_exists(id)) {
+		if(not db.recipe_exists(id)) {
 			std::cerr << "No recipe exists with ID " << id << "." << std::endl;
 			return EXIT_FAILURE;
 		} else {
@@ -131,33 +124,30 @@ int cmd_delete(int argc, char *argv[]) {
 		}
 	}
 
-	ret = (db_del_recipes(recipe_ids)) ? EXIT_SUCCESS : EXIT_FAILURE;
+	db.del_recipes(recipe_ids);
+	db.close();
 
-	db_close();
-
-	return ret;
+	return EXIT_SUCCESS;
 }
 
 int cmd_info(const int id) {
+	db db;
 	struct recipe recipe;
 	std::vector<std::string> ingredients, tags;
 	int ret = EXIT_SUCCESS;
 
-	if(not db_open()) {
-		std::cerr << "Failed to open database. Cannot add new entry." << std::endl;
-		return EXIT_FAILURE;
-	}
+	db.open();
 
-	if(not db_recipe_exists(id)) {
+	if(not db.recipe_exists(id)) {
 		std::cerr << "No recipe with ID '" << id << "'";
 		return EXIT_FAILURE;
 	}
 
-	recipe = db_get_recipe(id);
-	ingredients = db_get_recipe_ingredients(id);
-	tags = db_get_recipe_tags(id);
+	recipe = db.get_recipe(id);
+	ingredients = db.get_recipe_ingredients(id);
+	tags = db.get_recipe_tags(id);
 
-	db_close();
+	db.close();
 
 	std::cout << "Name: " << recipe.name << "\n"
 		<< "Description: " << recipe.description << "\n"

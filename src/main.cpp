@@ -16,8 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
 #include <cstdlib>
+#include <exception>
+#include <iostream>
 #include <string>
 
 #include "arg_parse.hpp"
@@ -35,29 +36,35 @@ int main(int argc, char *argv[]) {
 
 	id = parse_args(argv[1]);
 
-	switch(id) {
-	case CMD_ADD:
-		ret = cmd_add();
-		break;
-	case CMD_LIST:
-		ret = cmd_list(argc - 1, argv + 1);
-		break;
-	case CMD_DEL:
-		ret = cmd_delete(argc - 2, argv + 2);
-		break;
-	case CMD_INFO:
-		ret = cmd_info(std::stoi(argv[2]));
-		break;
-	case CMD_HELP:
-		print_help();
-		break;
-	case CMD_VERSION:
-		print_version();
-		break;
-	default:
-		std::cerr << "No such command '" << argv[1] << "'. Use 'help' sub-command." << std::endl;
-		print_usage();
-		return EXIT_FAILURE;
+	try {
+		switch(id) {
+		case CMD_ADD:
+			ret = cmd_add();
+			break;
+		case CMD_LIST:
+			ret = cmd_list(argc - 1, argv + 1);
+			break;
+		case CMD_DEL:
+			ret = cmd_delete(argc - 2, argv + 2);
+			break;
+		case CMD_INFO:
+			ret = cmd_info(std::stoi(argv[2]));
+			break;
+		case CMD_HELP:
+			print_help();
+			break;
+		case CMD_VERSION:
+			print_version();
+			break;
+		default:
+			std::cerr << "No such command '" << argv[1] << "'. Use 'help' sub-command." << std::endl;
+			print_usage();
+			ret = EXIT_FAILURE;
+			break;
+		}
+	} catch(const std::exception &e) {
+		std::cerr << e.what() << std::endl;
+		ret = EXIT_FAILURE;
 	}
 
 	return ret;
