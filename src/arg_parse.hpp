@@ -36,7 +36,7 @@ static const std::map<enum cmd_id, std::vector<std::string>> commands = {
 	{ CMD_ADD, {"add", "new"} },
 	{ CMD_LIST, {"list", "ls"} },
 	{ CMD_DEL, {"del", "rm"} },
-	{ CMD_INFO, { "info" } },
+	{ CMD_INFO, {"info", "i"} },
 	{ CMD_HELP, {"help", "-h", "--help"} },
 	{ CMD_VERSION, {"version", "-v", "--version"} },
 };
