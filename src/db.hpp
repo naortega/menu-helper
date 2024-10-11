@@ -38,8 +38,11 @@ void db_close(void);
  * @return ID of newly created recipe, -1 if DB isn't open, -2 on other failure.
  */
 int db_add_recipe(const std::string &name, const std::string &description);
+bool db_del_recipe(const int id);
+bool db_del_recipes(const std::vector<int> &ids);
 int db_get_recipe_id(const std::string &name);
-static inline int db_recipe_exists(const std::string &name) {
+bool db_recipe_exists(const int id);
+static inline bool db_recipe_exists(const std::string &name) {
 	return (db_get_recipe_id(name) > 0);
 }
 std::vector<struct recipe> db_get_recipes(const std::vector<std::string> &ingredients,
@@ -54,7 +57,7 @@ std::vector<struct recipe> db_get_recipes(const std::vector<std::string> &ingred
  */
 int db_add_ingredient(const std::string &name);
 int db_get_ingredient_id(const std::string &name);
-static inline int db_ingredient_exists(const std::string &name) {
+static inline bool db_ingredient_exists(const std::string &name) {
 	return (db_get_ingredient_id(name) > 0);
 }
 
@@ -67,7 +70,7 @@ static inline int db_ingredient_exists(const std::string &name) {
  */
 int db_add_tag(const std::string &name);
 int db_get_tag_id(const std::string &name);
-static inline int db_tag_exists(const std::string &name) {
+static inline bool db_tag_exists(const std::string &name) {
 	return (db_get_tag_id(name) > 0);
 }
 

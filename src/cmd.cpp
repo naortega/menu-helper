@@ -105,3 +105,35 @@ int command_list(int argc, char *argv[]) {
 
 	return EXIT_SUCCESS;
 }
+
+int command_delete(int argc, char *argv[]) {
+	int ret = EXIT_SUCCESS;
+	std::vector<int> recipe_ids;
+
+	if(argc < 1) {
+		std::cerr << "No specified IDs. Use 'help' for more information." << std::endl;
+		return EXIT_FAILURE;
+	}
+
+	if(not db_open()) {
+		std::cerr << "Failed to open database. Cannot add new entry." << std::endl;
+		return EXIT_FAILURE;
+	}
+
+	for(int i = 0; i < argc; ++i) {
+		const int id = std::stoi(argv[i]);
+
+		if(not db_recipe_exists(id)) {
+			std::cerr << "No recipe exists with ID " << id << "." << std::endl;
+			return EXIT_FAILURE;
+		} else {
+			recipe_ids.push_back(id);
+		}
+	}
+
+	ret = (db_del_recipes(recipe_ids)) ? EXIT_SUCCESS : EXIT_FAILURE;
+
+	db_close();
+
+	return ret;
+}

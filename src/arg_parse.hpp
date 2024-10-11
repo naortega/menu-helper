@@ -26,6 +26,7 @@ enum cmd_id {
 	CMD_UNKNOWN = 0,
 	CMD_ADD,
 	CMD_LIST,
+	CMD_DEL,
 	CMD_HELP,
 	CMD_VERSION,
 };
@@ -33,6 +34,7 @@ enum cmd_id {
 static const std::map<enum cmd_id, std::vector<std::string>> commands = {
 	{ CMD_ADD, {"add", "new"} },
 	{ CMD_LIST, {"list", "ls"} },
+	{ CMD_DEL, {"del", "rm"} },
 	{ CMD_HELP, {"help", "-h", "--help"} },
 	{ CMD_VERSION, {"version", "-v", "--version"} },
 };
@@ -52,6 +54,7 @@ static inline void print_help(void) {
 	std::cout << "COMMANDS:\n"
 		   "\tadd, new                 Add a new recipe to the database.\n"
 		   "\tlist, ls                 List recipes with filters.\n"
+		   "\tdel, rm                  Delete recipe by ID.\n"
 		   "\thelp, -h, --help         Show this help information.\n"
 		   "\tversion, -v, --version   Show version information.\n"
 		   << std::endl;

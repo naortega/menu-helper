@@ -112,6 +112,56 @@ int db_add_recipe(const std::string &name, const std::string &description) {
 	return db_get_recipe_id(name);
 }
 
+bool db_del_recipe(const int id) {
+	if(not db)
+		return false;
+
+	if(sqlite3_exec(db, std::format("DELETE FROM recipes WHERE id={}", id).c_str(),
+					nullptr, nullptr, nullptr) not_eq SQLITE_OK)
+		return false;
+
+	return true;
+}
+
+bool db_del_recipes(const std::vector<int> &ids) {
+	std::string stmt = "DELETE FROM recipes WHERE id IN (";
+
+	if(not db)
+		return false;
+
+	bool first = true;
+	for(auto id : ids) {
+		if(first)
+			first = false;
+		else
+			stmt += ",";
+
+		stmt += std::to_string(id);
+	}
+
+	stmt += ");";
+
+	if(sqlite3_exec(db, stmt.c_str(), nullptr, nullptr, nullptr) not_eq SQLITE_OK)
+		return false;
+
+	return true;
+}
+
+bool db_recipe_exists(const int id) {
+	bool exists = false;
+
+	if(not db)
+		return false;
+
+	sqlite3_exec(db, std::format("SELECT id FROM recipes WHERE id={}", id).c_str(),
+				 [](void *found,int,char**,char**) {
+				 *static_cast<bool*>(found) = true;
+				 return 0;
+				 }, &exists, nullptr);
+
+	return exists;
+}
+
 int db_get_recipe_id(const std::string &name) {
 	if(not db)
 		return -1;
