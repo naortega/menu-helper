@@ -37,16 +37,16 @@ int main(int argc, char *argv[]) {
 
 	switch(id) {
 	case CMD_ADD:
-		ret = command_add();
+		ret = cmd_add();
 		break;
 	case CMD_LIST:
-		ret = command_list(argc - 1, argv + 1);
+		ret = cmd_list(argc - 1, argv + 1);
 		break;
 	case CMD_DEL:
-		ret = command_delete(argc - 2, argv + 2);
+		ret = cmd_delete(argc - 2, argv + 2);
 		break;
 	case CMD_INFO:
-		ret = command_info(std::stoi(argv[2]));
+		ret = cmd_info(std::stoi(argv[2]));
 		break;
 	case CMD_HELP:
 		print_help();

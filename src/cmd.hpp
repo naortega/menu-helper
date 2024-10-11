@@ -17,7 +17,7 @@
  */
 #pragma once
 
-int command_add(void);
-int command_list(int argc, char *argv[]);
-int command_delete(int argc, char *argv[]);
-int command_info(const int id);
+int cmd_add(void);
+int cmd_list(int argc, char *argv[]);
+int cmd_delete(int argc, char *argv[]);
+int cmd_info(const int id);

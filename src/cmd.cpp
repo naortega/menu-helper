@@ -25,7 +25,7 @@
 #include <vector>
 #include <unistd.h>
 
-int command_add(void) {
+int cmd_add(void) {
 	std::string name, description, ingredients, tags;
 	int recipe_id, ingredient_id, tag_id;
 
@@ -70,7 +70,7 @@ int command_add(void) {
 	return EXIT_SUCCESS;
 }
 
-int command_list(int argc, char *argv[]) {
+int cmd_list(int argc, char *argv[]) {
 	std::vector<std::string> ingredients, tags;
 	int opt;
 
@@ -106,7 +106,7 @@ int command_list(int argc, char *argv[]) {
 	return EXIT_SUCCESS;
 }
 
-int command_delete(int argc, char *argv[]) {
+int cmd_delete(int argc, char *argv[]) {
 	int ret = EXIT_SUCCESS;
 	std::vector<int> recipe_ids;
 
@@ -138,7 +138,7 @@ int command_delete(int argc, char *argv[]) {
 	return ret;
 }
 
-int command_info(const int id) {
+int cmd_info(const int id) {
 	struct recipe recipe;
 	std::vector<std::string> ingredients, tags;
 	int ret = EXIT_SUCCESS;
