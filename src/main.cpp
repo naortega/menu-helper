@@ -24,6 +24,7 @@
 
 int main(int argc, char *argv[]) {
 	enum cmd_id id;
+	int ret = EXIT_SUCCESS;
 
 	if(argc < 2) {
 		std::cerr << "Invalid number of arguments. Use 'help' sub-command." << std::endl;
@@ -35,7 +36,10 @@ int main(int argc, char *argv[]) {
 
 	switch(id) {
 	case CMD_ADD:
-		command_add();
+		ret = command_add();
+		break;
+	case CMD_LIST:
+		ret = command_list(argc - 1, argv + 1);
 		break;
 	case CMD_HELP:
 		print_help();
@@ -49,5 +53,5 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	return EXIT_SUCCESS;
+	return ret;
 }

@@ -23,9 +23,10 @@
 #include <filesystem>
 #include <format>
 #include <string>
+#include <vector>
 
 #define DB_VERSION 1
-static sqlite3 *db = NULL;
+static sqlite3 *db = nullptr;
 
 int db_open(void) {
 	std::string xdg_data_home;
@@ -55,14 +56,14 @@ int db_open(void) {
 	rc = sqlite3_open(db_path.c_str(), &db);
 
 	if(rc == SQLITE_OK && new_db) {
-		sqlite3_exec(db, "CREATE TABLE db_version(version INTEGER UNIQUE NOT NULL);", NULL, NULL, NULL);
+		sqlite3_exec(db, "CREATE TABLE db_version(version INTEGER UNIQUE NOT nullptr);", nullptr, nullptr, nullptr);
 		//snprintf(insert_version_stmt, 64, "INSERT INTO db_version VALUES(%d);", DB_VERSION);
-		sqlite3_exec(db, std::format("INSERT INTO db_version VALUES({});", DB_VERSION).c_str(), NULL, NULL, NULL);
-		sqlite3_exec(db, "CREATE TABLE tags(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING UNIQUE);", NULL, NULL, NULL);
-		sqlite3_exec(db, "CREATE TABLE ingredients(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING UNIQUE);", NULL, NULL, NULL);
-		sqlite3_exec(db, "CREATE TABLE recipes(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING UNIQUE, description STRING);", NULL, NULL, NULL);
-		sqlite3_exec(db, "CREATE TABLE recipe_tag(recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE, tag_id INTEGER REFERENCES tags(id) ON DELETE CASCADE);", NULL, NULL, NULL);
-		sqlite3_exec(db, "CREATE TABLE recipe_ingredient(recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE, ingredient_id INTEGER REFERENCES ingredients(id) ON DELETE CASCADE);", NULL, NULL, NULL);
+		sqlite3_exec(db, std::format("INSERT INTO db_version VALUES({});", DB_VERSION).c_str(), nullptr, nullptr, nullptr);
+		sqlite3_exec(db, "CREATE TABLE tags(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING UNIQUE);", nullptr, nullptr, nullptr);
+		sqlite3_exec(db, "CREATE TABLE ingredients(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING UNIQUE);", nullptr, nullptr, nullptr);
+		sqlite3_exec(db, "CREATE TABLE recipes(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING UNIQUE, description STRING);", nullptr, nullptr, nullptr);
+		sqlite3_exec(db, "CREATE TABLE recipe_tag(recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE, tag_id INTEGER REFERENCES tags(id) ON DELETE CASCADE);", nullptr, nullptr, nullptr);
+		sqlite3_exec(db, "CREATE TABLE recipe_ingredient(recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE, ingredient_id INTEGER REFERENCES ingredients(id) ON DELETE CASCADE);", nullptr, nullptr, nullptr);
 	}
 
 	return rc == SQLITE_OK;
@@ -94,7 +95,7 @@ int table_get_id_by_name(const std::string &table, const std::string &name) {
 	int id = 0;
 
 	if(sqlite3_exec(db, std::format("SELECT id FROM {} WHERE lower(name)=lower('{}');", table, name).c_str(),
-					query_id_cb, &id, NULL) != SQLITE_OK)
+					query_id_cb, &id, nullptr) != SQLITE_OK)
 		return -2;
 
 	return id;
@@ -105,7 +106,7 @@ int db_add_recipe(const std::string &name, const std::string &description) {
 		return -1;
 
 	if(sqlite3_exec(db, std::format("INSERT INTO recipes(name,description) VALUES('{}','{}');", name, description).c_str(),
-					NULL, NULL, NULL) != SQLITE_OK)
+					nullptr, nullptr, nullptr) != SQLITE_OK)
 		return -2;
 
 	return db_get_recipe_id(name);
@@ -118,12 +119,88 @@ int db_get_recipe_id(const std::string &name) {
 	return table_get_id_by_name("recipes", name);
 }
 
+std::vector<struct recipe> db_get_recipes(const std::vector<std::string> &ingredients,
+										  const std::vector<std::string> &tags)
+{
+	std::vector<struct recipe> recipes;
+	std::string stmt = "SELECT id,name,description FROM recipes";
+	std::string filters;
+
+	if(not ingredients.empty() or not tags.empty())
+		filters += " WHERE";
+
+	if(not ingredients.empty()) {
+		bool first = true;
+		for(auto &i : ingredients) {
+			int id;
+
+			if(first)
+				first = false;
+			else
+				filters += " AND";
+
+			filters += " id IN (SELECT recipe_id FROM recipe_ingredient WHERE ingredient_id=";
+
+			// TODO: use throw?
+			if((id = db_get_ingredient_id(i)) < 0) {
+				std::cerr << "Failed to find ingredient '" << i << "'" << std::endl;
+				return std::vector<struct recipe>();
+			} else {
+				filters += std::to_string(id);
+			}
+
+			filters += ")";
+		}
+	}
+
+	if(not tags.empty()) {
+		if(not filters.empty())
+			filters += " AND";
+
+		bool first = true;
+		for(auto &i : tags) {
+			int id;
+
+			if(first)
+				first = false;
+			else
+				filters += " AND";
+
+			filters += " id IN (SELECT recipe_id FROM recipe_tag WHERE tag_id=";
+
+			// TODO: use throw?
+			if((id = db_get_tag_id(i)) < 0) {
+				std::cerr << "Failed to find tag '" << i << "'" << std::endl;
+				return std::vector<struct recipe>();
+			} else {
+				filters += std::to_string(id);
+			}
+
+			filters += ")";
+		}
+	}
+
+	stmt += filters + ";";
+
+	sqlite3_exec(db, stmt.c_str(),
+				 [](void *recipe_list, int, char **col_data, char**) {
+				 	auto recipe_vec = static_cast<std::vector<struct recipe>*>(recipe_list);
+					recipe_vec->push_back({
+										  std::atoi(col_data[0]),
+										  col_data[1],
+										  col_data[2] });
+					return 0;
+				 }, &recipes, nullptr);
+
+	return recipes;
+}
+
 int db_add_ingredient(const std::string &name) {
 	if(not db)
 		return -1;
 
 	if(sqlite3_exec(db, std::format("INSERT INTO ingredients(name) VALUES(lower('{}'));", name).c_str(),
-					NULL, NULL, NULL) != SQLITE_OK)
+					nullptr, nullptr, nullptr) != SQLITE_OK)
 		return -2;
 
 	return db_get_ingredient_id(name);
@@ -141,7 +218,7 @@ int db_add_tag(const std::string &name) {
 		return -1;
 
 	if(sqlite3_exec(db, std::format("INSERT INTO tags(name) VALUES('{}');", name).c_str(),
-					NULL, NULL, NULL) != SQLITE_OK)
+					nullptr, nullptr, nullptr) != SQLITE_OK)
 		return -2;
 
 	return db_get_tag_id(name);
@@ -159,7 +236,7 @@ int db_conn_recipe_ingredient(int recipe_id, int ingredient_id) {
 		return -1;
 
 	if(sqlite3_exec(db, std::format("INSERT INTO recipe_ingredient(recipe_id, ingredient_id) VALUES({},{});", recipe_id, ingredient_id).c_str(),
-					NULL, NULL, NULL) != SQLITE_OK)
+					nullptr, nullptr, nullptr) != SQLITE_OK)
 		return -2;
 
 	return 1;
@@ -170,7 +247,7 @@ int db_conn_recipe_tag(int recipe_id, int tag_id) {
 		return -1;
 
 	if(sqlite3_exec(db, std::format("INSERT INTO recipe_tag(recipe_id, tag_id) VALUES({},{});", recipe_id, tag_id).c_str(),
-					NULL, NULL, NULL) != SQLITE_OK)
+					nullptr, nullptr, nullptr) != SQLITE_OK)
 		return -2;
 
 	return 1;

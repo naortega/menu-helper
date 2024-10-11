@@ -22,15 +22,12 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <vector>
+#include <unistd.h>
 
 int command_add(void) {
 	std::string name, description, ingredients, tags;
 	int recipe_id, ingredient_id, tag_id;
-
-	if(not db_open()) {
-		std::cerr << "Failed to open database. Cannot add new entry." << std::endl;
-		return EXIT_FAILURE;
-	}
 
 	std::cout << "Name: ";
 	getline(std::cin, name);
@@ -43,6 +40,11 @@ int command_add(void) {
 
 	std::cout << "Tags (comma separated): ";
 	getline(std::cin, tags);
+
+	if(not db_open()) {
+		std::cerr << "Failed to open database. Cannot add new entry." << std::endl;
+		return EXIT_FAILURE;
+	}
 
 	if((recipe_id = db_get_recipe_id(name)) <= 0)
 		recipe_id = db_add_recipe(name, description);
@@ -62,6 +64,42 @@ int command_add(void) {
 			tag_id = db_add_tag(tag);
 		db_conn_recipe_tag(recipe_id, tag_id);
 	}
+
+	db_close();
+
+	return EXIT_SUCCESS;
+}
+
+int command_list(int argc, char *argv[]) {
+	std::vector<std::string> ingredients, tags;
+	int opt;
+
+	while((opt = getopt(argc, argv, "i:t:")) != -1) {
+		switch(opt) {
+		case 'i':
+			ingredients = split(optarg, ",");
+			for(auto &i : ingredients)
+				trim(i);
+			break;
+		case 't':
+			tags = split(optarg, ",");
+			for(auto &i : tags)
+				trim(i);
+			break;
+		case '?':
+			std::cerr << "Unknown option '" << static_cast<char>(optopt)
+				<< "'. Use 'help' for information." << std::endl;
+			return EXIT_FAILURE;
+		}
+	}
+
+	if(not db_open()) {
+		std::cerr << "Failed to open database. Cannot add new entry." << std::endl;
+		return EXIT_FAILURE;
+	}
+
+	for(const auto &recipe : db_get_recipes(ingredients, tags))
+		std::cout << recipe.id << "  |  " << recipe.name << "  |  " << recipe.description << std::endl;
 
 	db_close();
 

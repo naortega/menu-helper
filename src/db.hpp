@@ -18,6 +18,13 @@
 #pragma once
 
 #include <string>
+#include <vector>
+
+struct recipe {
+	int id;
+	std::string name;
+	std::string description;
+};
 
 int db_open(void);
 void db_close(void);
@@ -35,6 +42,8 @@ int db_get_recipe_id(const std::string &name);
 static inline int db_recipe_exists(const std::string &name) {
 	return (db_get_recipe_id(name) > 0);
 }
+std::vector<struct recipe> db_get_recipes(const std::vector<std::string> &ingredients,
+										  const std::vector<std::string> &tags);
 
 /**
  * @brief Add a new ingredient to the database.

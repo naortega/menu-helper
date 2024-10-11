@@ -18,3 +18,4 @@
 #pragma once
 
 int command_add(void);
+int command_list(int argc, char *argv[]);
