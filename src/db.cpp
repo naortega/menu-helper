@@ -47,7 +47,6 @@ int db_open(void) {
 
 	db_path += "/recipes.db";
 
-	//if(access(db_path, F_OK) != 0) {
 	if(not std::filesystem::exists(db_path)) {
 		std::cout << "Creating database: " << db_path << std::endl;
 		new_db = true;
@@ -57,7 +56,6 @@ int db_open(void) {
 
 	if(rc == SQLITE_OK && new_db) {
 		sqlite3_exec(db, "CREATE TABLE db_version(version INTEGER UNIQUE NOT nullptr);", nullptr, nullptr, nullptr);
-		//snprintf(insert_version_stmt, 64, "INSERT INTO db_version VALUES(%d);", DB_VERSION);
 		sqlite3_exec(db, std::format("INSERT INTO db_version VALUES({});", DB_VERSION).c_str(), nullptr, nullptr, nullptr);
 		sqlite3_exec(db, "CREATE TABLE tags(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING UNIQUE);", nullptr, nullptr, nullptr);
 		sqlite3_exec(db, "CREATE TABLE ingredients(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING UNIQUE);", nullptr, nullptr, nullptr);
