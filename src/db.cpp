@@ -54,7 +54,7 @@ int db_open(void) {
 
 	rc = sqlite3_open(db_path.c_str(), &db);
 
-	if(rc == SQLITE_OK && new_db) {
+	if(rc == SQLITE_OK and new_db) {
 		sqlite3_exec(db, "CREATE TABLE db_version(version INTEGER UNIQUE NOT nullptr);", nullptr, nullptr, nullptr);
 		sqlite3_exec(db, std::format("INSERT INTO db_version VALUES({});", DB_VERSION).c_str(), nullptr, nullptr, nullptr);
 		sqlite3_exec(db, "CREATE TABLE tags(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING UNIQUE);", nullptr, nullptr, nullptr);
@@ -93,7 +93,7 @@ int table_get_id_by_name(const std::string &table, const std::string &name) {
 	int id = 0;
 
 	if(sqlite3_exec(db, std::format("SELECT id FROM {} WHERE lower(name)=lower('{}');", table, name).c_str(),
-					query_id_cb, &id, nullptr) != SQLITE_OK)
+					query_id_cb, &id, nullptr) not_eq SQLITE_OK)
 		return -2;
 
 	return id;
@@ -104,7 +104,7 @@ int db_add_recipe(const std::string &name, const std::string &description) {
 		return -1;
 
 	if(sqlite3_exec(db, std::format("INSERT INTO recipes(name,description) VALUES('{}','{}');", name, description).c_str(),
-					nullptr, nullptr, nullptr) != SQLITE_OK)
+					nullptr, nullptr, nullptr) not_eq SQLITE_OK)
 		return -2;
 
 	return db_get_recipe_id(name);
@@ -248,7 +248,7 @@ int db_add_ingredient(const std::string &name) {
 		return -1;
 
 	if(sqlite3_exec(db, std::format("INSERT INTO ingredients(name) VALUES(lower('{}'));", name).c_str(),
-					nullptr, nullptr, nullptr) != SQLITE_OK)
+					nullptr, nullptr, nullptr) not_eq SQLITE_OK)
 		return -2;
 
 	return db_get_ingredient_id(name);
@@ -266,7 +266,7 @@ int db_add_tag(const std::string &name) {
 		return -1;
 
 	if(sqlite3_exec(db, std::format("INSERT INTO tags(name) VALUES('{}');", name).c_str(),
-					nullptr, nullptr, nullptr) != SQLITE_OK)
+					nullptr, nullptr, nullptr) not_eq SQLITE_OK)
 		return -2;
 
 	return db_get_tag_id(name);
@@ -284,7 +284,7 @@ int db_conn_recipe_ingredient(int recipe_id, int ingredient_id) {
 		return -1;
 
 	if(sqlite3_exec(db, std::format("INSERT INTO recipe_ingredient(recipe_id, ingredient_id) VALUES({},{});", recipe_id, ingredient_id).c_str(),
-					nullptr, nullptr, nullptr) != SQLITE_OK)
+					nullptr, nullptr, nullptr) not_eq SQLITE_OK)
 		return -2;
 
 	return 1;
@@ -295,7 +295,7 @@ int db_conn_recipe_tag(int recipe_id, int tag_id) {
 		return -1;
 
 	if(sqlite3_exec(db, std::format("INSERT INTO recipe_tag(recipe_id, tag_id) VALUES({},{});", recipe_id, tag_id).c_str(),
-					nullptr, nullptr, nullptr) != SQLITE_OK)
+					nullptr, nullptr, nullptr) not_eq SQLITE_OK)
 		return -2;
 
 	return 1;

@@ -74,7 +74,7 @@ int command_list(int argc, char *argv[]) {
 	std::vector<std::string> ingredients, tags;
 	int opt;
 
-	while((opt = getopt(argc, argv, "i:t:")) != -1) {
+	while((opt = getopt(argc, argv, "i:t:")) not_eq -1) {
 		switch(opt) {
 		case 'i':
 			ingredients = split(optarg, ",");
