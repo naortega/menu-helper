@@ -18,6 +18,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <string>
 
 #include "arg_parse.hpp"
 #include "cmd.hpp"
@@ -43,6 +44,9 @@ int main(int argc, char *argv[]) {
 		break;
 	case CMD_DEL:
 		ret = command_delete(argc - 2, argv + 2);
+		break;
+	case CMD_INFO:
+		ret = command_info(std::stoi(argv[2]));
 		break;
 	case CMD_HELP:
 		print_help();

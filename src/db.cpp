@@ -167,6 +167,18 @@ int db_get_recipe_id(const std::string &name) {
 	return table_get_id_by_name("recipes", name);
 }
 
+struct recipe db_get_recipe(const int id) {
+	struct recipe recipe;
+
+	sqlite3_exec(db, std::format("SELECT * FROM recipes WHERE id={};", id).c_str(),
+				 [](void *recipe, int, char **col_data, char**) {
+				 *static_cast<struct recipe*>(recipe) = { std::atoi(col_data[0]), col_data[1], col_data[2] };
+				 return 0;
+				 }, &recipe, nullptr);
+
+	return recipe;
+}
+
 std::vector<struct recipe> db_get_recipes(const std::vector<std::string> &ingredients,
 										  const std::vector<std::string> &tags)
 {
@@ -254,6 +266,18 @@ int db_add_ingredient(const std::string &name) {
 	return db_get_ingredient_id(name);
 }
 
+std::vector<std::string> db_get_recipe_ingredients(const int id) {
+	std::vector<std::string> ingredients;
+
+	sqlite3_exec(db, std::format("SELECT name FROM ingredients WHERE id IN (SELECT ingredient_id FROM recipe_ingredient WHERE recipe_id={});", id).c_str(),
+				 [](void *ingredients, int, char **col_data, char**) {
+				 static_cast<std::vector<std::string>*>(ingredients)->push_back(col_data[0]);
+				 return 0;
+				 }, &ingredients, nullptr);
+
+	return ingredients;
+}
+
 int db_get_ingredient_id(const std::string &name) {
 	if(not db)
 		return -1;
@@ -270,6 +294,18 @@ int db_add_tag(const std::string &name) {
 		return -2;
 
 	return db_get_tag_id(name);
+}
+
+std::vector<std::string> db_get_recipe_tags(const int id) {
+	std::vector<std::string> tags;
+
+	sqlite3_exec(db, std::format("SELECT name FROM tags WHERE id IN (SELECT tag_id FROM recipe_tag WHERE recipe_id={});", id).c_str(),
+				 [](void *tags, int, char **col_data, char**) {
+				 static_cast<std::vector<std::string>*>(tags)->push_back(col_data[0]);
+				 return 0;
+				 }, &tags, nullptr);
+
+	return tags;
 }
 
 int db_get_tag_id(const std::string &name) {

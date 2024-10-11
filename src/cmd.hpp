@@ -20,3 +20,4 @@
 int command_add(void);
 int command_list(int argc, char *argv[]);
 int command_delete(int argc, char *argv[]);
+int command_info(const int id);

@@ -137,3 +137,42 @@ int command_delete(int argc, char *argv[]) {
 
 	return ret;
 }
+
+int command_info(const int id) {
+	struct recipe recipe;
+	std::vector<std::string> ingredients, tags;
+	int ret = EXIT_SUCCESS;
+
+	if(not db_open()) {
+		std::cerr << "Failed to open database. Cannot add new entry." << std::endl;
+		return EXIT_FAILURE;
+	}
+
+	if(not db_recipe_exists(id)) {
+		std::cerr << "No recipe with ID '" << id << "'";
+		return EXIT_FAILURE;
+	}
+
+	recipe = db_get_recipe(id);
+	ingredients = db_get_recipe_ingredients(id);
+	tags = db_get_recipe_tags(id);
+
+	db_close();
+
+	std::cout << "Name: " << recipe.name << "\n"
+		<< "Description: " << recipe.description << "\n"
+		<< "ID: " << recipe.id << "\n"
+		<< std::endl;
+
+	std::cout << "Ingredients:" << std::endl;
+	for(auto &ingredient : ingredients)
+		std::cout << "\t- " << ingredient << std::endl;
+	std::cout << std::endl;
+
+	std::cout << "Tags:" << std::endl;
+	for(auto &tag : tags)
+		std::cout << "\t- " << tag << std::endl;
+	std::cout << std::endl;
+
+	return ret;
+}
