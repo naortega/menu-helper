@@ -54,7 +54,7 @@ public:
 	inline int get_recipe_id(const std::string &name) {
 		return table_get_id_by_name("recipes", name);
 	}
-	inline bool db_recipe_exists(const std::string &name) {
+	inline bool recipe_exists(const std::string &name) {
 		return (get_recipe_id(name) > 0);
 	}
 	bool recipe_exists(const int id);
@@ -74,7 +74,7 @@ public:
 	inline int get_ingredient_id(const std::string &name) {
 		return table_get_id_by_name("ingredients", name);
 	}
-	inline bool db_ingredient_exists(const std::string &name) {
+	inline bool ingredient_exists(const std::string &name) {
 		return (get_ingredient_id(name) > 0);
 	}
 
