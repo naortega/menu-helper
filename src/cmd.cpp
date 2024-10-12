@@ -134,7 +134,6 @@ int cmd_info(const int id) {
 	db db;
 	struct recipe recipe;
 	std::vector<std::string> ingredients, tags;
-	int ret = EXIT_SUCCESS;
 
 	db.open();
 
@@ -164,5 +163,5 @@ int cmd_info(const int id) {
 		std::cout << "\t- " << tag << std::endl;
 	std::cout << std::endl;
 
-	return ret;
+	return EXIT_SUCCESS;
 }
