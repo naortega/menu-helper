@@ -55,8 +55,8 @@ void db::open(void) {
 		sqlite3_exec(sqlite_db, "CREATE TABLE tags(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING UNIQUE);", nullptr, nullptr, nullptr);
 		sqlite3_exec(sqlite_db, "CREATE TABLE ingredients(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING UNIQUE);", nullptr, nullptr, nullptr);
 		sqlite3_exec(sqlite_db, "CREATE TABLE recipes(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING UNIQUE, description STRING);", nullptr, nullptr, nullptr);
-		sqlite3_exec(sqlite_db, "CREATE TABLE recipe_tag(recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE, tag_id INTEGER REFERENCES tags(id) ON DELETE CASCADE);", nullptr, nullptr, nullptr);
-		sqlite3_exec(sqlite_db, "CREATE TABLE recipe_ingredient(recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE, ingredient_id INTEGER REFERENCES ingredients(id) ON DELETE CASCADE);", nullptr, nullptr, nullptr);
+		sqlite3_exec(sqlite_db, "CREATE TABLE recipe_tag(recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE, tag_id INTEGER REFERENCES tags(id) ON DELETE CASCADE, UNIQUE(recipe_id, tag_id));", nullptr, nullptr, nullptr);
+		sqlite3_exec(sqlite_db, "CREATE TABLE recipe_ingredient(recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE, ingredient_id INTEGER REFERENCES ingredients(id) ON DELETE CASCADE, UNIQUE(recipe_id, ingredient_id));", nullptr, nullptr, nullptr);
 	}
 }
 
