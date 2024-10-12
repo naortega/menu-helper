@@ -118,6 +118,7 @@ int cmd_delete(int argc, char *argv[]) {
 
 		if(not db.recipe_exists(id)) {
 			std::cerr << "No recipe exists with ID " << id << "." << std::endl;
+			db.close();
 			return EXIT_FAILURE;
 		} else {
 			recipe_ids.push_back(id);
@@ -139,6 +140,7 @@ int cmd_info(const int id) {
 
 	if(not db.recipe_exists(id)) {
 		std::cerr << "No recipe with ID '" << id << "'";
+		db.close();
 		return EXIT_FAILURE;
 	}
 
