@@ -50,7 +50,7 @@ void db::open(void) {
 		throw std::runtime_error("Failed to open database file " + db_path);
 
 	if(new_db) {
-		sqlite3_exec(sqlite_db, "CREATE TABLE db_version(version INTEGER UNIQUE NOT nullptr);", nullptr, nullptr, nullptr);
+		sqlite3_exec(sqlite_db, "CREATE TABLE db_version(version INTEGER UNIQUE NOT NULL);", nullptr, nullptr, nullptr);
 		sqlite3_exec(sqlite_db, std::format("INSERT INTO db_version VALUES({});", DB_VERSION).c_str(), nullptr, nullptr, nullptr);
 		sqlite3_exec(sqlite_db, "CREATE TABLE tags(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING UNIQUE);", nullptr, nullptr, nullptr);
 		sqlite3_exec(sqlite_db, "CREATE TABLE ingredients(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING UNIQUE);", nullptr, nullptr, nullptr);
