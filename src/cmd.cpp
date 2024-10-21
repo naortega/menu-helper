@@ -167,3 +167,60 @@ int cmd_info(const int id) {
 
 	return EXIT_SUCCESS;
 }
+
+int cmd_add_ingr(const int recipe_id, const char *ingredients) {
+	db db;
+	std::vector<std::string> ingr_list = split(ingredients, ",");
+
+	db.open();
+	if(not db.recipe_exists(recipe_id)) {
+		std::cerr << "Recipe with ID " << recipe_id << " does not exist." << std::endl;
+		db.close();
+		return EXIT_FAILURE;
+	}
+
+	for(auto &i : ingr_list) {
+		int ingr_id;
+		trim(i);
+
+		if(not db.ingredient_exists(i))
+			ingr_id = db.add_ingredient(i);
+		else
+			ingr_id = db.get_ingredient_id(i);
+
+		db.conn_recipe_ingredient(recipe_id, ingr_id);
+	}
+
+	db.close();
+
+	return EXIT_SUCCESS;
+}
+
+int cmd_rm_ingr(const int recipe_id, const char *ingredients) {
+	db db;
+	std::vector<std::string> ingr_list = split(ingredients, ",");
+
+	db.open();
+	if(not db.recipe_exists(recipe_id)) {
+		std::cerr << "Recipe with ID " << recipe_id << " does not exist." << std::endl;
+		db.close();
+		return EXIT_FAILURE;
+	}
+
+	for(auto &i : ingr_list) {
+		int ingr_id;
+		trim(i);
+
+		if(not db.ingredient_exists(i)) {
+			std::cerr << "Could not find ingredient '" << i << "'. Skipping!" << std::endl;
+			continue;
+		}
+
+		ingr_id = db.get_ingredient_id(i);
+		db.disconn_recipe_ingredient(recipe_id, ingr_id);
+	}
+
+	db.close();
+
+	return EXIT_SUCCESS;
+}

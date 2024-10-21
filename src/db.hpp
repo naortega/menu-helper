@@ -95,5 +95,6 @@ public:
 	}
 
 	void conn_recipe_ingredient(int recipe_id, int ingredient_id);
+	void disconn_recipe_ingredient(int recipe_id, int ingredient_id);
 	void conn_recipe_tag(int recipe_id, int tag_id);
 };

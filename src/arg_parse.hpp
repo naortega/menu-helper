@@ -28,6 +28,8 @@ enum cmd_id {
 	CMD_LIST,
 	CMD_DEL,
 	CMD_INFO,
+	CMD_ADD_INGR,
+	CMD_RM_INGR,
 	CMD_HELP,
 	CMD_VERSION,
 };
@@ -37,6 +39,8 @@ static const std::map<enum cmd_id, std::vector<std::string>> commands = {
 	{ CMD_LIST, {"list", "ls"} },
 	{ CMD_DEL, {"del", "rm"} },
 	{ CMD_INFO, {"info", "i"} },
+	{ CMD_ADD_INGR, {"add-ingr"} },
+	{ CMD_RM_INGR, {"rm-ingr"} },
 	{ CMD_HELP, {"help", "-h", "--help"} },
 	{ CMD_VERSION, {"version", "-v", "--version"} },
 };
@@ -58,6 +62,8 @@ static inline void print_help(void) {
 		   "\tlist, ls                 List recipes with filters.\n"
 		   "\tdel, rm                  Delete recipe by ID.\n"
 		   "\tinfo                     Show recipe information.\n"
+		   "\tadd-ingr                 Add ingredient to a recipe.\n"
+		   "\trm-ingr                  Remove ingredient from a recipe.\n"
 		   "\thelp, -h, --help         Show this help information.\n"
 		   "\tversion, -v, --version   Show version information.\n"
 		   << std::endl;

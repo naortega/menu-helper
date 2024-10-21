@@ -21,3 +21,5 @@ int cmd_add(void);
 int cmd_list(int argc, char *argv[]);
 int cmd_delete(int argc, char *argv[]);
 int cmd_info(const int id);
+int cmd_add_ingr(const int recipe_id, const char *ingredients);
+int cmd_rm_ingr(const int recipe_id, const char *ingredients);

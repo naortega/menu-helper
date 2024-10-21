@@ -50,6 +50,12 @@ int main(int argc, char *argv[]) {
 		case CMD_INFO:
 			ret = cmd_info(std::stoi(argv[2]));
 			break;
+		case CMD_ADD_INGR:
+			ret = cmd_add_ingr(std::stoi(argv[2]), argv[3]);
+			break;
+		case CMD_RM_INGR:
+			ret = cmd_rm_ingr(std::stoi(argv[2]), argv[3]);
+			break;
 		case CMD_HELP:
 			print_help();
 			break;

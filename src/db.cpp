@@ -101,7 +101,7 @@ int db::add_recipe(const std::string &name, const std::string &description) {
 	if(not sqlite_db)
 		throw std::runtime_error(std::format("{}: Database not open! Please contact a developer.", __PRETTY_FUNCTION__));
 
-	if(sqlite3_exec(sqlite_db, std::format("INSERT INTO recipes(name,description) VALUES('{}','{}');", name, description).c_str(),
+	if(sqlite3_exec(sqlite_db, std::format("INSERT OR IGNORE INTO recipes(name,description) VALUES('{}','{}');", name, description).c_str(),
 					nullptr, nullptr, nullptr) not_eq SQLITE_OK) {
 		throw std::runtime_error("Failed to insert new recipe into database.");
 	}
@@ -251,7 +251,7 @@ int db::add_ingredient(const std::string &name) {
 	if(not sqlite_db)
 		throw std::runtime_error(std::format("{}: Database not open! Please contact a developer.", __PRETTY_FUNCTION__));
 
-	if(sqlite3_exec(sqlite_db, std::format("INSERT INTO ingredients(name) VALUES(lower('{}'));", name).c_str(),
+	if(sqlite3_exec(sqlite_db, std::format("INSERT OR IGNORE INTO ingredients(name) VALUES(lower('{}'));", name).c_str(),
 					nullptr, nullptr, nullptr) not_eq SQLITE_OK) {
 		throw std::runtime_error(std::format("Failed to instert ingredient '{}'.", name));
 	}
@@ -280,7 +280,7 @@ int db::add_tag(const std::string &name) {
 	if(not sqlite_db)
 		throw std::runtime_error(std::format("{}: Database not open! Please contact a developer.", __PRETTY_FUNCTION__));
 
-	if(sqlite3_exec(sqlite_db, std::format("INSERT INTO tags(name) VALUES('{}');", name).c_str(),
+	if(sqlite3_exec(sqlite_db, std::format("INSERT OR IGNORE INTO tags(name) VALUES('{}');", name).c_str(),
 					nullptr, nullptr, nullptr) not_eq SQLITE_OK) {
 		throw std::runtime_error(std::format("Failed to insert tag '{}'", name));
 	}
@@ -309,10 +309,20 @@ void db::conn_recipe_ingredient(int recipe_id, int ingredient_id) {
 	if(not sqlite_db)
 		throw std::runtime_error(std::format("{}: Database not open! Please contact a developer.", __PRETTY_FUNCTION__));
 
-	if(sqlite3_exec(sqlite_db, std::format("INSERT INTO recipe_ingredient(recipe_id, ingredient_id) VALUES({},{});", recipe_id, ingredient_id).c_str(),
+	if(sqlite3_exec(sqlite_db, std::format("INSERT OR IGNORE INTO recipe_ingredient(recipe_id, ingredient_id) VALUES({},{});", recipe_id, ingredient_id).c_str(),
 					nullptr, nullptr, nullptr) not_eq SQLITE_OK) {
 		throw std::runtime_error(std::format("Failed to connect recipe with ID {} to ingredient with ID {}",
 												  recipe_id, ingredient_id));
+	}
+}
+
+void db::disconn_recipe_ingredient(int recipe_id, int ingredient_id) {
+	if(not sqlite_db)
+		throw std::runtime_error(std::format("{}: Database not open! Please contact a developer.", __PRETTY_FUNCTION__));
+
+	if(sqlite3_exec(sqlite_db, std::format("DELETE FROM recipe_ingredient WHERE recipe_id={} AND ingredient_id={};", recipe_id, ingredient_id).c_str(),
+					nullptr, nullptr, nullptr) not_eq SQLITE_OK) {
+		throw std::runtime_error(std::format("Failed to disconnect recipe with ID {} from ingredient with ID {}.", recipe_id, ingredient_id));
 	}
 }
 
@@ -320,7 +330,7 @@ void db::conn_recipe_tag(int recipe_id, int tag_id) {
 	if(not sqlite_db)
 		throw std::runtime_error(std::format("{}: Database not open! Please contact a developer.", __PRETTY_FUNCTION__));
 
-	if(sqlite3_exec(sqlite_db, std::format("INSERT INTO recipe_tag(recipe_id, tag_id) VALUES({},{});", recipe_id, tag_id).c_str(),
+	if(sqlite3_exec(sqlite_db, std::format("INSERT OR IGNORE INTO recipe_tag(recipe_id, tag_id) VALUES({},{});", recipe_id, tag_id).c_str(),
 					nullptr, nullptr, nullptr) not_eq SQLITE_OK) {
 		throw std::runtime_error(std::format("Failed to connect recipe with ID {} to tag with ID {}",
 												  recipe_id, tag_id));
