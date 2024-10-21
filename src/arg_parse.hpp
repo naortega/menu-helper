@@ -25,8 +25,8 @@
 enum cmd_id {
 	CMD_UNKNOWN = 0,
 	CMD_ADD,
-	CMD_LIST,
 	CMD_DEL,
+	CMD_LIST,
 	CMD_INFO,
 	CMD_ADD_INGR,
 	CMD_RM_INGR,
@@ -38,8 +38,8 @@ enum cmd_id {
 
 static const std::map<enum cmd_id, std::vector<std::string>> commands = {
 	{ CMD_ADD, {"add", "new"} },
-	{ CMD_LIST, {"list", "ls"} },
 	{ CMD_DEL, {"del", "rm"} },
+	{ CMD_LIST, {"list", "ls"} },
 	{ CMD_INFO, {"info", "i"} },
 	{ CMD_ADD_INGR, {"add-ingr"} },
 	{ CMD_RM_INGR, {"rm-ingr"} },
@@ -63,8 +63,8 @@ static inline void print_help(void) {
 
 	std::cout << "COMMANDS:\n"
 		   "\tadd, new                 Add a new recipe to the database.\n"
-		   "\tlist, ls                 List recipes with filters.\n"
 		   "\tdel, rm                  Delete recipe by ID.\n"
+		   "\tlist, ls                 List recipes with filters.\n"
 		   "\tinfo                     Show recipe information.\n"
 		   "\tadd-ingr                 Add ingredient to a recipe.\n"
 		   "\trm-ingr                  Remove ingredient from a recipe.\n"

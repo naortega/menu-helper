@@ -41,11 +41,11 @@ int main(int argc, char *argv[]) {
 		case CMD_ADD:
 			ret = cmd_add();
 			break;
-		case CMD_LIST:
-			ret = cmd_list(argc - 1, argv + 1);
-			break;
 		case CMD_DEL:
 			ret = cmd_delete(argc - 2, argv + 2);
+			break;
+		case CMD_LIST:
+			ret = cmd_list(argc - 1, argv + 1);
 			break;
 		case CMD_INFO:
 			ret = cmd_info(std::stoi(argv[2]));
