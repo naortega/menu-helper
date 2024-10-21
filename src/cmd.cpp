@@ -224,3 +224,60 @@ int cmd_rm_ingr(const int recipe_id, const char *ingredients) {
 
 	return EXIT_SUCCESS;
 }
+
+int cmd_add_tag(const int recipe_id, const char *tags) {
+	db db;
+	std::vector<std::string> tag_list = split(tags, ",");
+
+	db.open();
+	if(not db.recipe_exists(recipe_id)) {
+		std::cerr << "Recipe with ID " << recipe_id << " does not exist." << std::endl;
+		db.close();
+		return EXIT_FAILURE;
+	}
+
+	for(auto &i : tag_list) {
+		int tag_id;
+		trim(i);
+
+		if(not db.tag_exists(i))
+			tag_id = db.add_tag(i);
+		else
+			tag_id = db.get_ingredient_id(i);
+
+		db.conn_recipe_tag(recipe_id, tag_id);
+	}
+
+	db.close();
+
+	return EXIT_SUCCESS;
+}
+
+int cmd_rm_tag(const int recipe_id, const char *tags) {
+	db db;
+	std::vector<std::string> tag_list = split(tags, ",");
+
+	db.open();
+	if(not db.recipe_exists(recipe_id)) {
+		std::cerr << "Recipe with ID " << recipe_id << " does not exist." << std::endl;
+		db.close();
+		return EXIT_FAILURE;
+	}
+
+	for(auto &i : tag_list) {
+		int tag_id;
+		trim(i);
+
+		if(not db.tag_exists(i)) {
+			std::cerr << "Could not find tag '" << i << "'. Skipping!" << std::endl;
+			continue;
+		}
+
+		tag_id = db.get_tag_id(i);
+		db.disconn_recipe_tag(recipe_id, tag_id);
+	}
+
+	db.close();
+
+	return EXIT_SUCCESS;
+}

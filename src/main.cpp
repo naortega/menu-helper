@@ -56,6 +56,12 @@ int main(int argc, char *argv[]) {
 		case CMD_RM_INGR:
 			ret = cmd_rm_ingr(std::stoi(argv[2]), argv[3]);
 			break;
+		case CMD_ADD_TAG:
+			ret = cmd_add_tag(std::stoi(argv[2]), argv[3]);
+			break;
+		case CMD_RM_TAG:
+			ret = cmd_rm_tag(std::stoi(argv[2]), argv[3]);
+			break;
 		case CMD_HELP:
 			print_help();
 			break;

@@ -336,3 +336,13 @@ void db::conn_recipe_tag(int recipe_id, int tag_id) {
 												  recipe_id, tag_id));
 	}
 }
+
+void db::disconn_recipe_tag(int recipe_id, int tag_id) {
+	if(not sqlite_db)
+		throw std::runtime_error(std::format("{}: Database not open! Please contact a developer.", __PRETTY_FUNCTION__));
+
+	if(sqlite3_exec(sqlite_db, std::format("DELETE FROM recipe_tag WHERE recipe_id={} AND tag_id={};", recipe_id, tag_id).c_str(),
+					nullptr, nullptr, nullptr) not_eq SQLITE_OK) {
+		throw std::runtime_error(std::format("Failed to disconnect recipe with ID {} from tag with ID {}.", recipe_id, tag_id));
+	}
+}
