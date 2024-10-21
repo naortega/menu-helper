@@ -8,3 +8,4 @@
 - [X] Add feature for editing recipe name and description.
   - [X] Name
   - [X] Description
+- [ ] Allow for writing description in editor.
