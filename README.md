@@ -17,6 +17,22 @@ To build the program you will require the following dependencies:
 
 Once installed, compile the project with the `make` command.
 
+## Contributing
+
+If you find any issues, feel free to report them on GitHub or send me an E-Mail
+(see my website/profile for the address). I will add these issues to my personal
+Gitea page and (unless specified otherwise) mention you as the person who found
+the issue.
+
+For patches/pull requests, if you open a PR on GitHub I will likely not merge
+directly but instead apply the patches locally (via Git patches, conserving
+authorship), push them to my Gitea repository, which will finally be mirrored to
+GitHub. However, you can save me a bit of work by just sending me the Git
+patches directly (via E-Mail).
+
+If you're looking for a way to contribute, consider having a look at my [To-Do
+list](/TODO.md) for the project.
+
 ## License
 
 This program is licensed under the terms & conditions of the GNU General Public
