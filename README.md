@@ -179,10 +179,10 @@ GitHub. However, you can save me a bit of work by just sending me the Git
 patches directly (via E-Mail).
 
 If you're looking for a way to contribute, consider having a look at my [To-Do
-list](/TODO.md) for the project.
+list](TODO.md) for the project.
 
 ## License
 
 This program is licensed under the terms & conditions of the GNU General Public
-License version 3 or greater. See the [LICENSE](/LICENSE) file for more
+License version 3 or greater. See the [LICENSE](LICENSE) file for more
 information.
