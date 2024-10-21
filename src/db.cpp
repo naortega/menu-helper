@@ -305,7 +305,7 @@ std::vector<std::string> db::get_recipe_tags(const int id) {
 	return tags;
 }
 
-void db::conn_recipe_ingredient(int recipe_id, int ingredient_id) {
+void db::conn_recipe_ingredient(const int recipe_id, const int ingredient_id) {
 	if(not sqlite_db)
 		throw std::runtime_error(std::format("{}: Database not open! Please contact a developer.", __PRETTY_FUNCTION__));
 
@@ -316,7 +316,7 @@ void db::conn_recipe_ingredient(int recipe_id, int ingredient_id) {
 	}
 }
 
-void db::disconn_recipe_ingredient(int recipe_id, int ingredient_id) {
+void db::disconn_recipe_ingredient(const int recipe_id, const int ingredient_id) {
 	if(not sqlite_db)
 		throw std::runtime_error(std::format("{}: Database not open! Please contact a developer.", __PRETTY_FUNCTION__));
 
@@ -326,7 +326,7 @@ void db::disconn_recipe_ingredient(int recipe_id, int ingredient_id) {
 	}
 }
 
-void db::conn_recipe_tag(int recipe_id, int tag_id) {
+void db::conn_recipe_tag(const int recipe_id, const int tag_id) {
 	if(not sqlite_db)
 		throw std::runtime_error(std::format("{}: Database not open! Please contact a developer.", __PRETTY_FUNCTION__));
 
@@ -337,7 +337,7 @@ void db::conn_recipe_tag(int recipe_id, int tag_id) {
 	}
 }
 
-void db::disconn_recipe_tag(int recipe_id, int tag_id) {
+void db::disconn_recipe_tag(const int recipe_id, const int tag_id) {
 	if(not sqlite_db)
 		throw std::runtime_error(std::format("{}: Database not open! Please contact a developer.", __PRETTY_FUNCTION__));
 

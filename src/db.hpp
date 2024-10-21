@@ -94,8 +94,8 @@ public:
 		return (get_tag_id(name) > 0);
 	}
 
-	void conn_recipe_ingredient(int recipe_id, int ingredient_id);
-	void disconn_recipe_ingredient(int recipe_id, int ingredient_id);
-	void conn_recipe_tag(int recipe_id, int tag_id);
-	void disconn_recipe_tag(int recipe_id, int tag_id);
+	void conn_recipe_ingredient(const int recipe_id, const int ingredient_id);
+	void disconn_recipe_ingredient(const int recipe_id, const int ingredient_id);
+	void conn_recipe_tag(const int recipe_id, const int tag_id);
+	void disconn_recipe_tag(const int recipe_id, const int tag_id);
 };
