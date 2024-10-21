@@ -29,6 +29,7 @@ enum cmd_id {
 	CMD_LIST,
 	CMD_INFO,
 	CMD_EDIT_NAME,
+	CMD_EDIT_DESC,
 	CMD_ADD_INGR,
 	CMD_RM_INGR,
 	CMD_ADD_TAG,
@@ -43,6 +44,7 @@ static const std::map<enum cmd_id, std::vector<std::string>> commands = {
 	{ CMD_LIST, {"list", "ls"} },
 	{ CMD_INFO, {"info", "i"} },
 	{ CMD_EDIT_NAME, {"edit-name"} },
+	{ CMD_EDIT_DESC, {"edit-description", "edit-desc"} },
 	{ CMD_ADD_INGR, {"add-ingr"} },
 	{ CMD_RM_INGR, {"rm-ingr"} },
 	{ CMD_ADD_TAG, {"add-tag"} },
@@ -64,17 +66,18 @@ static inline void print_help(void) {
 	print_usage();
 
 	std::cout << "COMMANDS:\n"
-		   "\tadd, new                 Add a new recipe to the database.\n"
-		   "\tdel, rm                  Delete recipe by ID.\n"
-		   "\tlist, ls                 List recipes with filters.\n"
-		   "\tinfo                     Show recipe information.\n"
-		   "\tedit-name                Change recipe name.\n"
-		   "\tadd-ingr                 Add ingredient to a recipe.\n"
-		   "\trm-ingr                  Remove ingredient from a recipe.\n"
-		   "\tadd-tag                  Add tag to a recipe.\n"
-		   "\trm-tag                   Remove tag from a recipe.\n"
-		   "\thelp, -h, --help         Show this help information.\n"
-		   "\tversion, -v, --version   Show version information.\n"
+		   "\tadd, new                     Add a new recipe to the database.\n"
+		   "\tdel, rm                      Delete recipe by ID.\n"
+		   "\tlist, ls                     List recipes with filters.\n"
+		   "\tinfo                         Show recipe information.\n"
+		   "\tedit-name                    Change recipe name.\n"
+		   "\tedit-description, edit-desc  Change recipe description.\n"
+		   "\tadd-ingr                     Add ingredient to a recipe.\n"
+		   "\trm-ingr                      Remove ingredient from a recipe.\n"
+		   "\tadd-tag                      Add tag to a recipe.\n"
+		   "\trm-tag                       Remove tag from a recipe.\n"
+		   "\thelp, -h, --help             Show this help information.\n"
+		   "\tversion, -v, --version       Show version information.\n"
 		   << std::endl;
 }
 

@@ -53,6 +53,9 @@ int main(int argc, char *argv[]) {
 		case CMD_EDIT_NAME:
 			ret = cmd_edit_name(std::stoi(argv[2]));
 			break;
+		case CMD_EDIT_DESC:
+			ret = cmd_edit_desc(std::stoi(argv[2]));
+			break;
 		case CMD_ADD_INGR:
 			ret = cmd_add_ingr(std::stoi(argv[2]), argv[3]);
 			break;

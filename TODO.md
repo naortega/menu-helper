@@ -5,6 +5,6 @@
 - [ ] Add more documentation to `help` subcommand.
 - [ ] Add import/export functionality.
 - [ ] Properly align output columns from `list` subcommand.
-- [ ] Add feature for editing recipe name and description.
+- [X] Add feature for editing recipe name and description.
   - [X] Name
-  - [ ] Description
+  - [X] Description

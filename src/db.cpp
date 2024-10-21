@@ -185,6 +185,16 @@ void db::update_recipe_name(const int id, const std::string &new_name) {
 	}
 }
 
+void db::update_recipe_desc(const int id, const std::string &new_desc) {
+	if(not sqlite_db)
+		throw std::runtime_error(std::format("{}: Database not open! Please contact a developer.", __PRETTY_FUNCTION__));
+
+	if(sqlite3_exec(sqlite_db, std::format("UPDATE OR IGNORE recipes SET description='{}' WHERE id={};", new_desc, id).c_str(),
+					nullptr, nullptr, nullptr) not_eq SQLITE_OK) {
+		throw std::runtime_error(std::format("Failed to modify description of recipe with ID {}.", id));
+	}
+}
+
 std::vector<struct recipe> db::get_recipes(const std::vector<std::string> &ingredients,
 										   const std::vector<std::string> &tags)
 {
