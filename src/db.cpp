@@ -42,7 +42,7 @@ void db::open(void) {
 	db_path += "/recipes.db";
 
 	if(not std::filesystem::exists(db_path)) {
-		std::cout << "Creating database: " << db_path << std::endl;
+		std::cout << "Creating database in " << db_path << std::endl;
 		new_db = true;
 	}
 
