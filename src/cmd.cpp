@@ -168,6 +168,27 @@ int cmd_info(const int id) {
 	return EXIT_SUCCESS;
 }
 
+int cmd_edit_name(const int id) {
+	db db;
+	std::string new_name;
+
+	db.open();
+	if(not db.recipe_exists(id)) {
+		std::cerr << "Recipe with ID " << id << " does not exist." << std::endl;
+		db.close();
+		return EXIT_FAILURE;
+	}
+
+	std::cout << "New name: ";
+	std::getline(std::cin, new_name);
+
+	db.update_recipe_name(id, new_name);
+
+	db.close();
+
+	return EXIT_SUCCESS;
+}
+
 int cmd_add_ingr(const int recipe_id, const char *ingredients) {
 	db db;
 	std::vector<std::string> ingr_list = split(ingredients, ",");

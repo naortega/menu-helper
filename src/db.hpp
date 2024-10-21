@@ -59,6 +59,7 @@ public:
 	}
 	bool recipe_exists(const int id);
 	struct recipe get_recipe(const int id);
+	void update_recipe_name(const int id, const std::string &new_name);
 	std::vector<struct recipe> get_recipes(const std::vector<std::string> &ingredients,
 										   const std::vector<std::string> &tags);
 

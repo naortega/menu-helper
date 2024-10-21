@@ -97,7 +97,25 @@ $ menu-helper list
 1  |  Linguine Scampi  |  A lemony Italian pasta dish.
 ```
 
-### Modifying Recipe Ingredients/Tags
+### Modifying Recipes
+
+#### Name & Description
+
+To correct or otherwise modify the name or description of your recipe, you can
+use the `edit-name` and `edit-description` subcommands. These will prompt you
+for the new name or description respectively and overwrite what was previously
+stored in the database:
+
+```console
+$ menu-helper edit-name 1
+New name: Lenguine agli Scampi
+$ menu-helper edit-description 1
+New description: A zesty Italian pasta dish.
+$ menu-helper list
+1  |  Linguine agli Scampi  | A zesty Italian pasta dish.
+```
+
+#### Ingredients/Tags
 
 If there are ingredients/tags which you forgot to add to a recipe, or that you
 added erringly, you can correct this with the following commands:
@@ -117,8 +135,8 @@ Scampi) that it is a pasta dish. We can do this with the following command:
 ```console
 $ menu-helper add-tag 1 pasta
 $ menu-helper info 1
-Name: Linguine Scampi
-Description: A lemony Italian pasta dish.
+Name: Linguine agli Scampi
+Description: A zesty Italian pasta dish.
 ID: 1
 
 Ingredients:

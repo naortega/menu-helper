@@ -6,5 +6,5 @@
 - [ ] Add import/export functionality.
 - [ ] Properly align output columns from `list` subcommand.
 - [ ] Add feature for editing recipe name and description.
-  - [ ] Name
+  - [X] Name
   - [ ] Description
