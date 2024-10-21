@@ -4,3 +4,7 @@
 - [ ] Create a man page.
 - [ ] Add more documentation to `help` subcommand.
 - [ ] Add import/export functionality.
+- [ ] Properly align output columns from `list` subcommand.
+- [ ] Add feature for editing recipe name and description.
+  - [ ] Name
+  - [ ] Description
