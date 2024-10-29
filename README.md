@@ -108,7 +108,7 @@ stored in the database:
 
 ```console
 $ menu-helper edit-name 1
-New name: Lenguine agli Scampi
+New name: Linguine agli Scampi
 $ menu-helper edit-description 1
 New description: A zesty Italian pasta dish.
 $ menu-helper list
