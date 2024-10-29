@@ -39,39 +39,63 @@ int main(int argc, char *argv[]) {
 	try {
 		switch(id) {
 		case CMD_ADD:
+			if(argc not_eq 2)
+				throw "Invalid number of arguments. Use 'help' subcommand for more information.";
 			ret = cmd_add();
 			break;
 		case CMD_DEL:
+			if(argc not_eq 3)
+				throw "Invalid number of arguments. Use 'help' subcommand for more information.";
 			ret = cmd_delete(argc - 2, argv + 2);
 			break;
 		case CMD_LIST:
+			if(argc > 6)
+				throw "Invalid number of arguments. Use 'help' subcommand for more information.";
 			ret = cmd_list(argc - 1, argv + 1);
 			break;
 		case CMD_INFO:
+			if(argc not_eq 3)
+				throw "Invalid number of arguments. Use 'help' subcommand for more information.";
 			ret = cmd_info(std::stoi(argv[2]));
 			break;
 		case CMD_EDIT_NAME:
+			if(argc not_eq 3)
+				throw "Invalid number of arguments. Use 'help' subcommand for more information.";
 			ret = cmd_edit_name(std::stoi(argv[2]));
 			break;
 		case CMD_EDIT_DESC:
+			if(argc not_eq 3)
+				throw "Invalid number of arguments. Use 'help' subcommand for more information.";
 			ret = cmd_edit_desc(std::stoi(argv[2]));
 			break;
 		case CMD_ADD_INGR:
+			if(argc not_eq 4)
+				throw "Invalid number of arguments. Use 'help' subcommand for more information.";
 			ret = cmd_add_ingr(std::stoi(argv[2]), argv[3]);
 			break;
 		case CMD_RM_INGR:
+			if(argc not_eq 4)
+				throw "Invalid number of arguments. Use 'help' subcommand for more information.";
 			ret = cmd_rm_ingr(std::stoi(argv[2]), argv[3]);
 			break;
 		case CMD_ADD_TAG:
+			if(argc not_eq 4)
+				throw "Invalid number of arguments. Use 'help' subcommand for more information.";
 			ret = cmd_add_tag(std::stoi(argv[2]), argv[3]);
 			break;
 		case CMD_RM_TAG:
+			if(argc not_eq 4)
+				throw "Invalid number of arguments. Use 'help' subcommand for more information.";
 			ret = cmd_rm_tag(std::stoi(argv[2]), argv[3]);
 			break;
 		case CMD_HELP:
+			if(argc not_eq 2)
+				throw "Invalid number of arguments. Use 'help' subcommand for more information.";
 			print_help();
 			break;
 		case CMD_VERSION:
+			if(argc not_eq 2)
+				throw "Invalid number of arguments. Use 'help' subcommand for more information.";
 			print_version();
 			break;
 		default:
