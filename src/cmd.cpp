@@ -20,6 +20,8 @@
 #include "util.hpp"
 
 #include <cstdlib>
+#include <sys/ioctl.h>
+#include <iomanip>
 #include <iostream>
 #include <string>
 #include <unistd.h>
@@ -71,6 +73,8 @@ int cmd_add(void) {
 int cmd_list(int argc, char *argv[]) {
 	db db;
 	std::vector<std::string> ingredients, tags;
+	struct winsize winsize;
+	const int id_col_sz = 5, name_col_sz = 24;
 	int opt;
 
 	while((opt = getopt(argc, argv, "i:t:")) not_eq -1) {
@@ -92,10 +96,20 @@ int cmd_list(int argc, char *argv[]) {
 		}
 	}
 
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &winsize);
+	const int desc_col_sz = winsize.ws_col - (id_col_sz + name_col_sz + 1);
+
 	db.open();
 
-	for(const auto &recipe : db.get_recipes(ingredients, tags))
-		std::cout << recipe.id << "  |  " << recipe.name << "  |  " << recipe.description << std::endl;
+	std::cout << std::left << std::setw(id_col_sz) << "ID"
+		<< std::setw(name_col_sz) << "NAME"
+		<< std::setw(desc_col_sz) << "DESCRIPTION" << std::endl;
+
+	for(const auto &recipe : db.get_recipes(ingredients, tags)) {
+		std::cout << std::left << std::setw(id_col_sz) << recipe.id
+			<< std::setw(name_col_sz) << recipe.name
+			<< std::setw(desc_col_sz) << recipe.description << std::endl;
+	}
 
 	db.close();
 
