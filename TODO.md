@@ -1,6 +1,6 @@
 # To-Do List
 
-- [-] v1.0
+- [ ] v1.0
   - [X] Add basic functionality.
   - [X] Add more safeguards to avoid bad usage.
   - [ ] Create a man page.
