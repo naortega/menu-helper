@@ -21,6 +21,7 @@ DEFS=
 CFLAGS=$(INCFLAGS) -std=c++20 -Wall -Wextra -Wfatal-errors -Werror
 HDRS=src/util.hpp src/arg_parse.hpp src/db.hpp src/cmd.hpp
 OBJS=src/main.o src/util.o src/arg_parse.o src/db.o src/cmd.o
+DOCS=menu-helper.1
 VERSION=1.0
 
 ifeq ($(PREFIX),)
@@ -39,6 +40,9 @@ endif
 menu-helper: $(OBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
+menu-helper.1.gz: $(DOCS)
+	gzip -c $< > $@
+
 .PHONY: clean distclean install
 
 clean:
@@ -47,5 +51,6 @@ clean:
 distclean: clean
 	$(RM) menu-helper
 
-install: menu-helper
+install: menu-helper menu-helper.1.gz
 	install -m 755 menu-helper $(PREFIX)/bin/
+	install -m 644 menu-helper.1.gz $(PREFIX)/share/man/man1/

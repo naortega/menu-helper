@@ -1,0 +1,65 @@
+.TH "MENU HELPER" "1" "November 2024" "menu-helper 1.0" "User Commands"
+.SH "NAME"
+menu-helper \- makes choosing meals easier
+.SH "SYNOPSIS"
+.B menu-helper
+<\fICOMMAND\fR> [\fIOPTIONS\fR]
+
+.SH "DESCRIPTION"
+A program to manage a database of recipes and help you pick out meals based on
+filters of ingredients and tags.
+
+.SH "COMMANDS"
+.TP
+.B \fBadd\fR, \fBnew\fR
+Add a new recipe to the database.
+.TP
+.B \fBdel\fR, \fBrm\fR <\fIid\fR>
+Delete recipe with provided \fIid\fR.
+.TP
+.B \fBlist\fR, \fBls\fR [-i <\fIingredients\fR>] [-t <\fItags\fR>]
+List all recipes that contain all \fIingredients\fR an \fItags\fR listed. If
+none are listed, then it prints all recipes stored in the database. Both
+\fIingredients\fR and \fItags\fR are comma-separated lists (e.g.
+"garlic,tomato").
+.TP
+.B \fBinfo\fR <\fIid\fR>
+Show all stored information on recipe with provided \fIid\fR.
+.TP
+.B \fBedit-name\fR <\fIid\fR>
+Change the name of the recipe with the provided \fIid\fR.
+.TP
+.B \fBedit-description\fR, \fBedit-desc\fR <\fIid\fR>
+Change the description of the recipe with the provided \fIid\fR.
+.TP
+.B \fBadd-ingr\fR <\fIid\fR> <\fIingredients\fR>
+Add the specified \fIingredients\fR to the recipe with \fIid\fR, where
+\fIingredients\fR is a comma-separated list (e.g. "garlic,tomato").
+.TP
+.B \fBrm-ingr\fR <\fIid\fR> <\fIingredients\fR>
+Remove the specified \fIingredients\fR from the recipe with \fIid\fR, where
+\fIingredients\fR is a comma-separated list (e.g. "garlic,tomato").
+.TP
+.B \fBadd-tag\fR <\fIid\fR> <\fItags\fR>
+Add the specified \fItags\fR to the recipe with \fIid\fR, where \fItags\fR is a
+comma-separated list (e.g. "dinner,simple").
+.TP
+.B \fBrm-tag\fR <\fIid\fR> <\fItags\fR>
+Remove the specified \fItags\fR from the recipe with \fIid\fR, where \fItags\fR
+is a comma-separated list (e.g. "dinner,simple").
+.TP
+.B \fBhelp\fR, \fB-h\fR, \fB--help\fR
+Show basic help information.
+.TP
+.B \fBversion\fR, \fB-v\fR, \fB--version\fR
+Show version information.
+
+.SH "AUTHOR"
+Written by Nicolás A. Ortega Froysa.
+
+.SH "COPYRIGHT"
+Copyright \(co 2024 Ortega Froysa, Nicolás A. <nicolas@ortegas.org>.
+License: GNU General Public License version 3 or greater (see <https://gnu.org/licenses/gpl.html>).
+
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
