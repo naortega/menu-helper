@@ -10,5 +10,7 @@
     - [X] Name
     - [X] Description
 
-- [ ] Add import/export functionality.
-- [ ] Allow for writing description in editor.
+- [ ] v1.1
+  - [ ] Add import/export functionality.
+  - [ ] Allow for writing description in editor.
+  - [ ] Add examples to man page.
