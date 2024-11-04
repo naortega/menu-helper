@@ -79,6 +79,7 @@ static inline void print_help(void) {
 		   "\thelp, -h, --help             Show this help information.\n"
 		   "\tversion, -v, --version       Show version information.\n"
 		   << std::endl;
+	std::cout << "For more information about subcommands, use 'man menu-helper'." << std::endl;
 }
 
 enum cmd_id parse_args(const std::string &cmd);

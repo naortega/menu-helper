@@ -4,7 +4,7 @@
   - [X] Add basic functionality.
   - [X] Add more safeguards to avoid bad usage.
   - [X] Create a man page.
-  - [ ] Add more documentation to `help` subcommand.
+  - [X] Add more documentation to `help` subcommand.
   - [X] Properly align output columns from `list` subcommand.
   - [X] Add feature for editing recipe name and description.
     - [X] Name
