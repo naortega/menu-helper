@@ -49,6 +49,7 @@ clean:
 	$(RM) $(OBJS)
 
 distclean: clean
+	$(RM) menu-helper.1.gz
 	$(RM) menu-helper
 
 install: menu-helper menu-helper.1.gz
