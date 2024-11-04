@@ -53,5 +53,7 @@ distclean: clean
 	$(RM) menu-helper
 
 install: menu-helper menu-helper.1.gz
+	install -d $(PREFIX)/bin
 	install -m 755 menu-helper $(PREFIX)/bin/
+	install -d $(PREFIX)/share/man/man1
 	install -m 644 menu-helper.1.gz $(PREFIX)/share/man/man1/
